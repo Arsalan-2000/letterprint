@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sticker Printer — چاپ استیکر روی A4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Dancing+Script:wght@400;700&family=Caveat:wght@400;700&family=Pacifico&family=Anton&family=Bebas+Neue&family=Inter:wght@300;400;700;900&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Special+Elite&family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700;900&family=Permanent+Marker&family=Architects+Daughter&family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sidebar-w: 340px;
+  --bg: #15151c;
+  --panel: #1e1e28;
+  --panel-2: #282834;
+  --border: #383846;
+  --text: #e8e8f0;
+  --text-dim: #8a8a95;
+  --accent: #d4af37;
+  --accent-2: #b8336a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Vazirmatn', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) 1fr;
+  height: 100vh;
+}
+
+/* ============ SIDEBAR ============ */
+.sidebar {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  padding: 18px;
+  overflow-y: auto;
+  direction: rtl;
+}
+.sidebar::-webkit-scrollbar { width: 8px; }
+.sidebar::-webkit-scrollbar-track { background: var(--panel); }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+.sidebar header {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar h1 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.sidebar h1 .icon { font-size: 22px; }
+.sidebar header p {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+.control-group {
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+.control-group:last-child { border-bottom: none; }
+.control-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+/* Template grid */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+.template-btn {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 6px;
+  border-radius: 6px;
+  font-family: 'Vazirmatn', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.template-btn:hover {
+  background: var(--border);
+  border-color: var(--accent);
+}
+.template-btn.active {
+  background: var(--accent);
+  color: #1a1a1f;
+  border-color: var(--accent);
+}
+
+/* Grid controls */
+.grid-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.grid-controls input {
+  width: 70px;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+.grid-controls input:focus { outline: 1px solid var(--accent); }
+.grid-controls span { color: var(--text-dim); font-weight: 700; }
+
+.preset-grids {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.preset-btn {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Vazirmatn', monospace;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.preset-btn:hover { background: var(--border); color: var(--text); }
+
+/* Select */
+select {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+select:focus { outline: 1px solid var(--accent); }
+
+/* Theme grid */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.theme-btn {
+  height: 38px;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  outline: 1px solid rgba(255,255,255,0.1);
+}
+.theme-btn:hover { transform: scale(1.05); }
+.theme-btn.active { border-color: var(--accent); transform: scale(1.05); }
+.theme-btn.tpl { background: linear-gradient(135deg, #fff 50%, #000 50%); }
+.theme-btn.black { background: #000; }
+.theme-btn.white { background: #fff; }
+.theme-btn.dark { background: #0a0e1a; }
+.theme-btn.cream { background: #f0e4cc; }
+.theme-btn.pink { background: linear-gradient(135deg, #ffd0dc, #ffe4ec); }
+.theme-btn.rainbow { background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #a55eea); }
+.theme-btn.neon { background: linear-gradient(135deg, #0a0a0a, #ec4899 70%); }
+.theme-hint {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Action buttons */
+button.action {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 4px;
+  transition: all 0.15s;
+}
+button.action:hover { background: var(--border); }
+button.action.danger:hover { background: #c62828; color: #fff; border-color: #c62828; }
+button.action.success:hover { background: #2e7d32; color: #fff; border-color: #2e7d32; }
+
+.print-btn {
+  width: 100%;
+  background: var(--accent);
+  color: #1a1a1f;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.15s;
+}
+.print-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+.help {
+  background: var(--panel-2);
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+.help p { margin-bottom: 4px; }
+.help kbd {
+  background: var(--border);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* ============ PREVIEW ============ */
+.preview {
+  background: #2a2a35;
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.02) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.02) 0%, transparent 50%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+  padding: 24px;
+  direction: ltr;
+}
+.preview::-webkit-scrollbar { width: 10px; height: 10px; }
+.preview::-webkit-scrollbar-track { background: #2a2a35; }
+.preview::-webkit-scrollbar-thumb { background: #4a4a55; border-radius: 4px; }
+
+.a4-page {
+  width: 210mm;
+  height: 297mm;
+  background: #fff;
+  box-shadow: 0 12px 50px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Grid inside A4 */
+.grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 4mm;
+  padding: 8mm;
+  box-sizing: border-box;
+}
+
+.cell {
+  background: #fff;
+  border: 1.5px solid #000;
+  padding: 4mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.3;
+  overflow: hidden;
+  position: relative;
+  cursor: text;
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  transition: outline 0.1s;
+  direction: rtl;
+}
+.cell:hover { outline: 2px dashed var(--accent); }
+.cell:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+.cell:empty::before {
+  content: "کلیک کنید و بنویسید";
+  color: #bbb;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+}
+.cell-text {
+  font-weight: 700;
+  line-height: 1.3;
+  width: 100%;
+  word-wrap: break-word;
+  word-break: break-word;
+  outline: none;
+  direction: rtl;
+}
+.cell-text:empty::before {
+  content: "کلیک کنید";
+  color: #bbb;
+  font-size: 11px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ============ TEMPLATES ============ */
+
+/* minimal */
+[data-template="minimal"] .cell {
+  background: #fff;
+  color: #000;
+  border: 1.5px solid #000;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+  padding: 4mm;
+}
+[data-template="minimal"] .cell:nth-child(2n) {
+  background: #000;
+  color: #fff;
+}
+
+/* puzzle */
+[data-template="puzzle"] .cell {
+  background: #faf6ed;
+  color: #2a1f28;
+  border: 1.5px solid #2a1f28;
+  box-shadow: 4px 4px 0 #2a1f28;
+  border-radius: 0;
+  transform: rotate(var(--rot, 0deg));
+  text-shadow: none;
+}
+[data-template="puzzle"] .cell:nth-child(3n+1) { --rot: -2deg; }
+[data-template="puzzle"] .cell:nth-child(3n+2) { --rot: 1.5deg; }
+[data-template="puzzle"] .cell:nth-child(3n) { --rot: -1deg; }
+[data-template="puzzle"] .cell:nth-child(4n+1) { background: #ffd6e0; color: #c2185b; }
+[data-template="puzzle"] .cell:nth-child(4n+3) { background: #fef9e7; color: #8a5a2a; }
+
+/* greeting */
+[data-template="greeting"] .cell {
+  background: linear-gradient(135deg, #ffe4ec 0%, #ffd0dc 100%);
+  color: #a8254a;
+  border: 1.5px solid rgba(255, 158, 178, 0.5);
+  border-radius: 14px;
+  box-shadow: 0 3px 8px rgba(184, 51, 106, 0.10);
+  transform: none;
+  text-shadow: none;
+  padding: 5mm;
+}
+[data-template="greeting"] .cell:nth-child(3n+1) {
+  background: linear-gradient(135deg, #f3e8fb 0%, #e9d5f7 100%);
+  color: #6a3a8a;
+  border-color: rgba(186, 152, 200, 0.5);
+}
+[data-template="greeting"] .cell:nth-child(3n+2) {
+  background: linear-gradient(135deg, #fff8e7 0%, #fff0c8 100%);
+  color: #8a5a2a;
+  border-color: rgba(218, 165, 100, 0.4);
+}
+[data-template="greeting"] .cell::before {
+  content: "♥";
+  position: absolute;
+  top: 3mm;
+  right: 4mm;
+  font-size: 14px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* typographic */
+[data-template="typographic"] .cell {
+  border: none;
+  background: transparent;
+  border-top: 1.5px solid #000;
+  border-radius: 0;
+  color: #000;
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+  padding: 3mm 4mm;
+}
+[data-template="typographic"] .cell:nth-child(2n) {
+  background: #000;
+  color: #fff;
+  border-top-color: #fff;
+}
+[data-template="typographic"] .cell-text {
+  font-size: 1.6em;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.05;
+}
+
+/* book */
+[data-template="book"] .cell {
+  background: #fef9e7;
+  color: #3a2418;
+  border: 1px solid rgba(58, 36, 24, 0.4);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 0.5px rgba(58, 36, 24, 0.2);
+  transform: none;
+  text-shadow: none;
+  padding: 5mm;
+}
+[data-template="book"] .cell::before {
+  content: "";
+  position: absolute;
+  inset: 2mm;
+  border: 0.5px solid rgba(58, 36, 24, 0.25);
+  pointer-events: none;
+}
+[data-template="book"] .cell-text {
+  font-family: 'Old Standard TT', serif;
+  font-style: italic;
+  font-weight: 700;
+}
+[data-template="book"] .cell:nth-child(3n) {
+  background: #3a2418;
+  color: #f0e4cc;
+}
+[data-template="book"] .cell:nth-child(3n)::before {
+  border-color: rgba(240, 228, 204, 0.3);
+}
+
+/* hue - rainbow */
+[data-template="hue"] .cell {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+  color: #fff;
+  font-weight: 800;
+}
+[data-template="hue"] .cell:nth-child(12n+1) { background: #ff6b6b; }
+[data-template="hue"] .cell:nth-child(12n+2) { background: #ff9e7d; }
+[data-template="hue"] .cell:nth-child(12n+3) { background: #ffd166; color: #1a1a1a; }
+[data-template="hue"] .cell:nth-child(12n+4) { background: #c5e57b; color: #1a1a1a; }
+[data-template="hue"] .cell:nth-child(12n+5) { background: #6bcf7f; }
+[data-template="hue"] .cell:nth-child(12n+6) { background: #4ecdc4; }
+[data-template="hue"] .cell:nth-child(12n+7) { background: #45b7d1; }
+[data-template="hue"] .cell:nth-child(12n+8) { background: #5a8fd6; }
+[data-template="hue"] .cell:nth-child(12n+9) { background: #a55eea; }
+[data-template="hue"] .cell:nth-child(12n+10) { background: #d4627a; }
+[data-template="hue"] .cell:nth-child(12n+11) { background: #ff6b9d; }
+[data-template="hue"] .cell:nth-child(12n) { background: #1a1a1a; }
+
+/* hierarchical - varied sizes */
+[data-template="hierarchical"] .cell {
+  background: #0a0a0a;
+  color: #fafafa;
+  border: 1px solid #fafafa;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+}
+[data-template="hierarchical"] .cell:nth-child(2n) {
+  background: #fafafa;
+  color: #0a0a0a;
+  border-color: #0a0a0a;
+}
+[data-template="hierarchical"] .cell:nth-child(7n) {
+  background: #d63031;
+  color: #fafafa;
+  border-color: #d63031;
+}
+
+/* board - cork polaroid */
+[data-template="board"] .a4-page {
+  background:
+    radial-gradient(circle at 20% 30%, rgba(180, 140, 100, 0.18) 0%, transparent 35%),
+    linear-gradient(135deg, #2b2620 0%, #35302a 50%, #2b2620 100%);
+}
+[data-template="board"] .cell {
+  background: #faf6ed;
+  color: #2a1f28;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+  transform: rotate(var(--rot, 0deg));
+  text-shadow: none;
+  padding: 5mm 5mm 6mm;
+}
+[data-template="board"] .cell:nth-child(4n+1) { --rot: -3deg; }
+[data-template="board"] .cell:nth-child(4n+2) { --rot: 2deg; }
+[data-template="board"] .cell:nth-child(4n+3) { --rot: -1.5deg; }
+[data-template="board"] .cell:nth-child(4n) { --rot: 2.5deg; }
+[data-template="board"] .cell:nth-child(3n) {
+  background: #fff5e0;
+  color: #8a5a2a;
+}
+
+/* brutalist */
+[data-template="brutalist"] .cell {
+  background: #fafafa;
+  color: #0a0a0a;
+  border: 1.5px solid #0a0a0a;
+  border-radius: 0;
+  box-shadow: none;
+  transform: none;
+  text-shadow: none;
+}
+[data-template="brutalist"] .cell:nth-child(2n) {
+  background: #0a0a0a;
+  color: #fafafa;
+}
+[data-template="brutalist"] .cell:nth-child(7n) {
+  background: #d63031;
+  color: #fafafa;
+  border-color: #d63031;
+}
+[data-template="brutalist"] .cell-text {
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+/* neon */
+[data-template="neon"] .a4-page {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(236, 72, 153, 0.18) 0%, transparent 35%),
+    radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.18) 0%, transparent 35%),
+    radial-gradient(circle at 30% 75%, rgba(168, 85, 247, 0.18) 0%, transparent 38%),
+    linear-gradient(180deg, #050208 0%, #0a0612 100%);
+}
+[data-template="neon"] .cell {
+  background: rgba(10, 6, 18, 0.6);
+  color: #fbcfe8;
+  border: 1px solid rgba(236, 72, 153, 0.5);
+  border-radius: 0;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.15), inset 0 0 12px rgba(236, 72, 153, 0.05);
+  transform: none;
+}
+[data-template="neon"] .cell-text {
+  text-shadow: 0 0 8px #ec4899, 0 0 16px rgba(236, 72, 153, 0.6);
+  font-weight: 700;
+}
+[data-template="neon"] .cell:nth-child(3n+1) {
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15), inset 0 0 12px rgba(56, 189, 248, 0.05);
+  color: #bae6fd;
+}
+[data-template="neon"] .cell:nth-child(3n+1) .cell-text {
+  text-shadow: 0 0 8px #38bdf8, 0 0 16px rgba(56, 189, 248, 0.6);
+}
+[data-template="neon"] .cell:nth-child(3n+2) {
+  background: rgba(168, 85, 247, 0.06);
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15), inset 0 0 12px rgba(168, 85, 247, 0.05);
+  color: #e9d5ff;
+}
+[data-template="neon"] .cell:nth-child(3n+2) .cell-text {
+  text-shadow: 0 0 8px #a855f7, 0 0 16px rgba(168, 85, 247, 0.6);
+}
+
+/* ============ COLOR THEMES (override templates) ============ */
+[data-theme="black"] .a4-page { background: #000 !important; }
+[data-theme="black"] .cell {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+[data-theme="black"] .cell::before { display: none !important; }
+
+[data-theme="white"] .a4-page { background: #fff !important; }
+[data-theme="white"] .cell {
+  background: #fff !important;
+  color: #000 !important;
+  border: 1.5px solid #000 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+[data-theme="white"] .cell::before { display: none !important; }
+
+[data-theme="dark"] .a4-page { background: #0a0e1a !important; }
+[data-theme="dark"] .cell {
+  background: #1a2238 !important;
+  color: #e8edf5 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+[data-theme="dark"] .cell::before { display: none !important; }
+
+[data-theme="cream"] .a4-page { background: #f0e4cc !important; }
+[data-theme="cream"] .cell {
+  background: #fef9e7 !important;
+  color: #3a2418 !important;
+  border: 1px solid rgba(58, 36, 24, 0.4) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+[data-theme="cream"] .cell::before { display: none !important; }
+
+[data-theme="pink"] .a4-page { background: #fef6f9 !important; }
+[data-theme="pink"] .cell {
+  background: linear-gradient(135deg, #ffe4ec 0%, #ffd0dc 100%) !important;
+  color: #a8254a !important;
+  border: 1.5px solid rgba(255, 158, 178, 0.5) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 3px 8px rgba(184, 51, 106, 0.10) !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+[data-theme="pink"] .cell::before { display: none !important; }
+
+[data-theme="rainbow"] .cell {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  text-shadow: none !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+}
+[data-theme="rainbow"] .cell::before { display: none !important; }
+[data-theme="rainbow"] .cell:nth-child(7n+1) { background: #ff6b6b !important; }
+[data-theme="rainbow"] .cell:nth-child(7n+2) { background: #ffd166 !important; color: #1a1a1a !important; }
+[data-theme="rainbow"] .cell:nth-child(7n+3) { background: #6bcf7f !important; }
+[data-theme="rainbow"] .cell:nth-child(7n+4) { background: #4ecdc4 !important; }
+[data-theme="rainbow"] .cell:nth-child(7n+5) { background: #45b7d1 !important; }
+[data-theme="rainbow"] .cell:nth-child(7n+6) { background: #a55eea !important; }
+[data-theme="rainbow"] .cell:nth-child(7n) { background: #ff6b9d !important; }
+
+[data-theme="neon"] .a4-page {
+  background: linear-gradient(180deg, #050208 0%, #0a0612 100%) !important;
+}
+[data-theme="neon"] .cell {
+  background: rgba(10, 6, 18, 0.6) !important;
+  color: #fbcfe8 !important;
+  border: 1px solid rgba(236, 72, 153, 0.5) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 0 12px rgba(236, 72, 153, 0.15) !important;
+  transform: none !important;
+}
+[data-theme="neon"] .cell-text {
+  text-shadow: 0 0 8px #ec4899, 0 0 16px rgba(236, 72, 153, 0.6) !important;
+}
+[data-theme="neon"] .cell::before { display: none !important; }
+
+/* ============ FONTS ============ */
+[data-font="vazirmatn"] .cell-text { font-family: 'Vazirmatn', sans-serif; }
+[data-font="playfair"] .cell-text { font-family: 'Playfair Display', serif; font-style: italic; }
+[data-font="dancing"] .cell-text { font-family: 'Dancing Script', cursive; font-size: 1.3em; }
+[data-font="caveat"] .cell-text { font-family: 'Caveat', cursive; font-size: 1.3em; }
+[data-font="pacifico"] .cell-text { font-family: 'Pacifico', cursive; font-size: 1.1em; }
+[data-font="anton"] .cell-text { font-family: 'Anton', sans-serif; font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
+[data-font="bebas"] .cell-text { font-family: 'Bebas Neue', sans-serif; font-weight: 400; letter-spacing: 2px; }
+[data-font="inter"] .cell-text { font-family: 'Inter', sans-serif; }
+[data-font="oldstandard"] .cell-text { font-family: 'Old Standard TT', serif; }
+[data-font="specialelite"] .cell-text { font-family: 'Special Elite', monospace; font-weight: 400; }
+[data-font="cormorant"] .cell-text { font-family: 'Cormorant Garamond', serif; font-style: italic; }
+[data-font="cinzel"] .cell-text { font-family: 'Cinzel', serif; letter-spacing: 1px; }
+[data-font="marker"] .cell-text { font-family: 'Permanent Marker', cursive; font-weight: 400; }
+[data-font="architects"] .cell-text { font-family: 'Architects Daughter', cursive; font-weight: 400; }
+
+/* ============ PRINT ============ */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    background: #fff !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+  .app {
+    display: block !important;
+    height: auto !important;
+  }
+  .sidebar { display: none !important; }
+  .preview {
+    background: #fff !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+  .a4-page {
+    box-shadow: none !important;
+    margin: 0 !important;
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+  .cell {
+    outline: none !important;
+    cursor: default !important;
+  }
+  .cell:hover { outline: none !important; }
+  .cell:empty::before, .cell-text:empty::before { content: "" !important; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <header>
+      <h1><span class="icon">✦</span> Sticker Printer</h1>
+      <p>چاپ استیکر روی برگه A4</p>
+    </header>
+
+    <section class="control-group">
+      <label>۱. قالب (Template)</label>
+      <div class="template-grid" id="templates">
+        <button class="template-btn active" data-tpl="minimal">مینیمال</button>
+        <button class="template-btn" data-tpl="puzzle">پازل</button>
+        <button class="template-btn" data-tpl="greeting">کارت تبریک</button>
+        <button class="template-btn" data-tpl="typographic">تایپوگرافیک</button>
+        <button class="template-btn" data-tpl="book">کتاب وینتیج</button>
+        <button class="template-btn" data-tpl="hue">رنگین‌کمان</button>
+        <button class="template-btn" data-tpl="hierarchical">سلسله‌مراتبی</button>
+        <button class="template-btn" data-tpl="board">تخته پولاروئید</button>
+        <button class="template-btn" data-tpl="brutalist">بروتالیسم</button>
+        <button class="template-btn" data-tpl="neon">نئون سایبر</button>
+      </div>
+    </section>
+
+    <section class="control-group">
+      <label>۲. اندازه گرید</label>
+      <div class="grid-controls">
+        <input type="number" id="cols" min="1" max="10" value="4">
+        <span>ستون ×</span>
+        <input type="number" id="rows" min="1" max="12" value="5">
+        <span>ردیف</span>
+      </div>
+      <div class="preset-grids">
+        <button class="preset-btn" data-grid="2,2">2×2</button>
+        <button class="preset-btn" data-grid="2,3">2×3</button>
+        <button class="preset-btn" data-grid="2,4">2×4</button>
+        <button class="preset-btn" data-grid="3,3">3×3</button>
+        <button class="preset-btn" data-grid="3,4">3×4</button>
+        <button class="preset-btn" data-grid="3,5">3×5</button>
+        <button class="preset-btn" data-grid="4,4">4×4</button>
+        <button class="preset-btn" data-grid="4,5">4×5</button>
+        <button class="preset-btn" data-grid="4,6">4×6</button>
+        <button class="preset-btn" data-grid="5,5">5×5</button>
+        <button class="preset-btn" data-grid="5,6">5×6</button>
+        <button class="preset-btn" data-grid="6,6">6×6</button>
+      </div>
+    </section>
+
+    <section class="control-group">
+      <label>۳. فونت</label>
+      <select id="font">
+        <option value="vazirmatn">Vazirmatn (فارسی - پیش‌فرض)</option>
+        <option value="playfair">Playfair Display Italic</option>
+        <option value="dancing">Dancing Script (دست‌نویس انگلیسی)</option>
+        <option value="caveat">Caveat (دست‌نویس)</option>
+        <option value="pacifico">Pacifico (اسکریپت)</option>
+        <option value="anton">Anton (Display ضخیم)</option>
+        <option value="bebas">Bebas Neue (Display فشرده)</option>
+        <option value="inter">Inter (سنس مدرن)</option>
+        <option value="oldstandard">Old Standard TT (وینتیج)</option>
+        <option value="specialelite">Special Elite (ماشین‌تحریر)</option>
+        <option value="cormorant">Cormorant Garamond Italic</option>
+        <option value="cinzel">Cinzel (کلاسیک رومی)</option>
+        <option value="marker">Permanent Marker (ماژیک)</option>
+        <option value="architects">Architects Daughter (معماری)</option>
+      </select>
+    </section>
+
+    <section class="control-group">
+      <label>۴. رنگ‌بندی (تم)</label>
+      <div class="theme-grid">
+        <button class="theme-btn tpl active" data-theme="" title="قالب خودش"></button>
+        <button class="theme-btn black" data-theme="black" title="مشکی"></button>
+        <button class="theme-btn white" data-theme="white" title="سفید"></button>
+        <button class="theme-btn dark" data-theme="dark" title="تیره"></button>
+        <button class="theme-btn cream" data-theme="cream" title="کرم"></button>
+        <button class="theme-btn pink" data-theme="pink" title="صورتی"></button>
+        <button class="theme-btn rainbow" data-theme="rainbow" title="رنگین‌کمان"></button>
+        <button class="theme-btn neon" data-theme="neon" title="نئون"></button>
+      </div>
+      <p class="theme-hint">اولین دکمه = استفاده از رنگ‌بندی خود قالب. بقیه = اعمال تم ثابت روی همه قالب‌ها.</p>
+    </section>
+
+    <section class="control-group">
+      <label>۵. مدیریت سلول‌ها</label>
+      <button class="action success" id="add-row">+ افزودن ردیف</button>
+      <button class="action success" id="add-col">+ افزودن ستون</button>
+      <button class="action" id="remove-row">− حذف ردیف آخر</button>
+      <button class="action" id="remove-col">− حذف ستون آخر</button>
+      <button class="action" id="fill-sample">↻ پر کردن با نمونه‌ها</button>
+      <button class="action danger" id="clear-all">🗑 پاک کردن همه</button>
+    </section>
+
+    <section class="control-group">
+      <button class="print-btn" id="print">🖨 پرینت / ذخیره PDF</button>
+    </section>
+
+    <section class="help">
+      <p>📝 <b>ویرایش متن:</b> روی هر سلول کلیک کن و بنویس.</p>
+      <p>↵ <kbd>Enter</kbd> = خط جدید در همون سلول</p>
+      <p>🖱 <kbd>Tab</kbd> = رفتن به سلول بعدی</p>
+      <p>💡 تغییر قالب/گرید/فونت/رنگ بلافاصله اعمال می‌شه.</p>
+      <p>🖨 دکمه پرینت = پرینت مستقیم یا ذخیره به صورت PDF.</p>
+    </section>
+  </aside>
+
+  <main class="preview">
+    <div class="a4-page" id="a4-page" data-template="minimal" data-font="vazirmatn">
+      <div class="grid" id="grid"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+'use strict';
+
+// ============ STATE ============
+const state = {
+  template: 'minimal',
+  cols: 4,
+  rows: 5,
+  font: 'vazirmatn',
+  theme: '',
+  cells: []  // array of { html: '...' }
+};
+
+const sampleTexts = [
+  'maybe people are\nright about what a freak i am',
+  'u are cute :)',
+  'خیلی خوشگلی',
+  'اندوه گین مباش',
+  'قربون آناتومی‌ات بروم',
+  'درود بر تو ای موجود نازنین',
+  'دلبندم، دنیا به کامت',
+  'You are my precious\nselected item\nand special achievement.',
+  'فعال بیکار',
+  'غریق غم فراق',
+  'دنیا محل گذر است',
+  'سهم منم همین بود',
+  'نگران نباش من خوبم',
+  'من از تبار غربتم',
+  'Motion heals.\nSpeed conquers.',
+  'جهان یادگار است و ما رفتنی',
+  'نذار ترس برات تصمیم بگیره',
+  'راه زیاد دیدم ولی آرامش نه',
+  'جاده‌ها تموم شدن، بی‌قراری نه',
+  'خیلی خوشگلی :)',
+  'مرا در کودکی شوق دگر بود',
+  'Outrunning sorrow',
+  'Scared little boy',
+  'u are cute :)',
+  'اندوه گین مباش',
+  'دلبندم، دنیا به کامت',
+  'قربون آناتومی‌ات بروم',
+  'درود بر تو ای موجود نازنین',
+  'خیلی خوشگلی',
+  'u are cute :)'
+];
+
+// ============ DOM ELEMENTS ============
+const grid = document.getElementById('grid');
+const a4Page = document.getElementById('a4-page');
+const colsInput = document.getElementById('cols');
+const rowsInput = document.getElementById('rows');
+const fontSelect = document.getElementById('font');
+
+// ============ HELPERS ============
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function textToHtml(text) {
+  return escapeHtml(text).replace(/\n/g, '<br>');
+}
+
+function htmlToText(html) {
+  // Convert <br> and </div> to \n, strip tags
+  return html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+// ============ INIT CELLS ============
+function ensureCells(count) {
+  const diff = count - state.cells.length;
+  if (diff > 0) {
+    for (let i = 0; i < diff; i++) {
+      const sampleIdx = (state.cells.length + i) % sampleTexts.length;
+      state.cells.push({ html: textToHtml(sampleTexts[sampleIdx]) });
+    }
+  } else if (diff < 0) {
+    state.cells = state.cells.slice(0, count);
+  }
+}
+
+// ============ RENDER ============
+function render() {
+  const total = state.cols * state.rows;
+  ensureCells(total);
+
+  // Apply data attributes for template/font/theme
+  a4Page.dataset.template = state.template;
+  a4Page.dataset.font = state.font;
+  if (state.theme) {
+    a4Page.dataset.theme = state.theme;
+  } else {
+    delete a4Page.dataset.theme;
+  }
+
+  // Set grid template
+  grid.style.gridTemplateColumns = `repeat(${state.cols}, 1fr)`;
+  grid.style.gridTemplateRows = `repeat(${state.rows}, 1fr)`;
+
+  // Track focused cell to restore
+  const focused = document.activeElement;
+  const focusedIdx = focused && focused.classList && focused.classList.contains('cell')
+    ? parseInt(focused.dataset.idx) : -1;
+  const selStart = focused && focused.innerHTML !== undefined ? focused.innerHTML.length : 0;
+
+  // Render cells
+  grid.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.contentEditable = 'true';
+    cell.spellcheck = false;
+    cell.dataset.idx = i;
+    cell.innerHTML = state.cells[i] ? state.cells[i].html : '';
+
+    // Save on input (no re-render)
+    cell.addEventListener('input', (e) => {
+      const idx = parseInt(e.target.dataset.idx);
+      if (state.cells[idx]) {
+        state.cells[idx].html = e.target.innerHTML;
+      }
+    });
+
+    // Handle Enter for line breaks - allow default browser behavior
+    cell.addEventListener('keydown', (e) => {
+      // Tab to next cell
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const next = e.shiftKey ? i - 1 : i + 1;
+        const nextCell = grid.querySelector(`.cell[data-idx="${next}"]`);
+        if (nextCell) {
+          nextCell.focus();
+        }
+      }
+    });
+
+    grid.appendChild(cell);
+  }
+
+  // Restore focus if possible
+  if (focusedIdx >= 0 && focusedIdx < total) {
+    const newCell = grid.querySelector(`.cell[data-idx="${focusedIdx}"]`);
+    if (newCell) {
+      newCell.focus();
+      // Move cursor to end
+      try {
+        const range = document.createRange();
+        range.selectNodeContents(newCell);
+        range.collapse(false);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      } catch (e) {}
+    }
+  }
+}
+
+// ============ EVENT HANDLERS ============
+
+// Templates
+document.getElementById('templates').addEventListener('click', (e) => {
+  const btn = e.target.closest('.template-btn');
+  if (!btn) return;
+  document.querySelectorAll('.template-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.template = btn.dataset.tpl;
+  render();
+});
+
+// Preset grids
+document.querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const [c, r] = btn.dataset.grid.split(',').map(Number);
+    state.cols = c;
+    state.rows = r;
+    colsInput.value = c;
+    rowsInput.value = r;
+    render();
+  });
+});
+
+// Grid inputs
+colsInput.addEventListener('input', (e) => {
+  state.cols = Math.max(1, Math.min(10, parseInt(e.target.value) || 1));
+  render();
+});
+rowsInput.addEventListener('input', (e) => {
+  state.rows = Math.max(1, Math.min(12, parseInt(e.target.value) || 1));
+  render();
+});
+
+// Font
+fontSelect.addEventListener('change', (e) => {
+  state.font = e.target.value;
+  // Just update data attribute, no need to re-render cells
+  a4Page.dataset.font = state.font;
+});
+
+// Themes
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.theme = btn.dataset.theme;
+    if (state.theme) {
+      a4Page.dataset.theme = state.theme;
+    } else {
+      delete a4Page.dataset.theme;
+    }
+  });
+});
+
+// Add/remove rows/cols
+document.getElementById('add-row').addEventListener('click', () => {
+  if (state.rows < 12) {
+    state.rows++;
+    rowsInput.value = state.rows;
+    render();
+  }
+});
+document.getElementById('remove-row').addEventListener('click', () => {
+  if (state.rows > 1) {
+    state.rows--;
+    rowsInput.value = state.rows;
+    render();
+  }
+});
+document.getElementById('add-col').addEventListener('click', () => {
+  if (state.cols < 10) {
+    state.cols++;
+    colsInput.value = state.cols;
+    render();
+  }
+});
+document.getElementById('remove-col').addEventListener('click', () => {
+  if (state.cols > 1) {
+    state.cols--;
+    colsInput.value = state.cols;
+    render();
+  }
+});
+
+// Clear all
+document.getElementById('clear-all').addEventListener('click', () => {
+  if (!confirm('همه سلول‌ها پاک بشن؟')) return;
+  const total = state.cols * state.rows;
+  state.cells = [];
+  for (let i = 0; i < total; i++) {
+    state.cells.push({ html: '' });
+  }
+  render();
+});
+
+// Fill with samples
+document.getElementById('fill-sample').addEventListener('click', () => {
+  const total = state.cols * state.rows;
+  state.cells = [];
+  for (let i = 0; i < total; i++) {
+    state.cells.push({ html: textToHtml(sampleTexts[i % sampleTexts.length]) });
+  }
+  render();
+});
+
+// Print
+document.getElementById('print').addEventListener('click', () => {
+  // Blur active cell to save its content
+  if (document.activeElement && document.activeElement.classList.contains('cell')) {
+    const idx = parseInt(document.activeElement.dataset.idx);
+    state.cells[idx].html = document.activeElement.innerHTML;
+    document.activeElement.blur();
+  }
+  setTimeout(() => window.print(), 150);
+});
+
+// ============ INITIAL RENDER ============
+render();
+</script>
+</body>
+</html>
